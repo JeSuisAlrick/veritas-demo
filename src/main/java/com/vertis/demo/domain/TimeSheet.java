@@ -5,6 +5,9 @@
  */
 package com.vertis.demo.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vertis.demo.deserializer.ClientDeserializer;
+import com.vertis.demo.deserializer.PersonDeserializer;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,6 +46,7 @@ public class TimeSheet extends DomainObject {
         return client;
     }
 
+    @JsonDeserialize(using = ClientDeserializer.class)
     public void setClient(Client client) {
         this.client = client;
     }
@@ -51,6 +55,7 @@ public class TimeSheet extends DomainObject {
         return owner;
     }
 
+    @JsonDeserialize(using = PersonDeserializer.class)
     public void setOwner(Person owner) {
         this.owner = owner;
     }

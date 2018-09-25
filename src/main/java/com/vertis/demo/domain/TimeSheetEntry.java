@@ -5,6 +5,8 @@
  */
 package com.vertis.demo.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vertis.demo.deserializer.TimeSheetDeserializer;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javax.persistence.Column;
@@ -70,6 +72,7 @@ public class TimeSheetEntry extends DomainObject {
         return timeSheet;
     }
 
+    @JsonDeserialize(using = TimeSheetDeserializer.class)
     public void setTimeSheet(TimeSheet timeSheet) {
         this.timeSheet = timeSheet;
     }
