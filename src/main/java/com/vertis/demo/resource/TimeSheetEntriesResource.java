@@ -5,10 +5,15 @@
  */
 package com.vertis.demo.resource;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  *
  * @author telfealr
  */
+@RestController
+@RequestMapping("/api/person/{pid:[\\d]+}/time-sheet/{id:[\\d]+}/entries")
 public class TimeSheetEntriesResource {
     
 }
