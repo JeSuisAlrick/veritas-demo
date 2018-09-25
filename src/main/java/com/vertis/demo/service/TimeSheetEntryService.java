@@ -5,74 +5,58 @@
  */
 package com.vertis.demo.service;
 
-import com.vertis.demo.domain.Person;
 import com.vertis.demo.domain.TimeSheet;
 import com.vertis.demo.domain.TimeSheetEntry;
 import com.vertis.demo.repository.TimeSheetEntryRepository;
 import com.vertis.demo.repository.TimeSheetRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author telfealr
  */
-public class TimeSheetService {
+@Service
+public class TimeSheetEntryService {
     @Autowired
     private TimeSheetRepository timeSheetRepository;
     @Autowired
     private TimeSheetEntryRepository timeSheetEntryRepository;
+    @Autowired
+    private PersonService personService;
     
-    // TimeSheet methods
-    public List<TimeSheet> findTimeSheets(Long personId) {
-        return timeSheetRepository.findAll(personId);
+    public List<TimeSheetEntry> findByTimeSheetId(Long timeSheetId) {
+        return timeSheetEntryRepository.findByTimeSheet_Id(timeSheetId);
     }
     
-    public List<TimeSheet> findTimeSheetsByOwner(Long personId) {
-        return timeSheetRepository.findByOwner_Id(personId);
+    public TimeSheetEntry findOne(Long timeSheetId, Long entryId) {
+        return timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
     }
     
-    public Optional<TimeSheet> findTimeSheetById(Long id) {
-        return timeSheetRepository.findById(id);
-    }
-    
-    public TimeSheet updateTimeSheet(Long id, TimeSheet timeSheet) {
-        TimeSheet existingTimeSheet = timeSheetRepository.findById(id).get();
-        if (existingTimeSheet != null) {
-            existingTimeSheet.setClient(timeSheet.getClient());
-            existingTimeSheet.setOwner(timeSheet.getOwner());
-            existingTimeSheet.setTitle(timeSheet.getTitle());
-            return timeSheetRepository.saveAndFlush(existingTimeSheet);
+    public TimeSheetEntry create(Long timeSheetId, TimeSheetEntry timeSheetEntry) {
+        Optional<TimeSheet> timeSheet = timeSheetRepository.findById(timeSheetId);
+        if (timeSheet.isPresent()) {
+            timeSheetEntry.setTimeSheet(timeSheet.get());
+            return timeSheetEntryRepository.saveAndFlush(timeSheetEntry);
         } else {
             return null;
         }
     }
     
-    public boolean deleteTimeSheet(Long id) {
-        TimeSheet existingTimeSheet = timeSheetRepository.findById(id).get();
-        if (existingTimeSheet != null) {
-            timeSheetRepository.deleteById(id);
-            return true;
+    public TimeSheetEntry update(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
+        TimeSheetEntry existingEntry = timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
+        if (existingEntry != null) {
+            BeanUtils.copyProperties(timeSheetEntry, existingEntry, "id");
+            return timeSheetEntryRepository.saveAndFlush(existingEntry);
         } else {
-            return false;
+            return null;
         }
     }
     
-    // TimeSheetEntry methods
-    public List<TimeSheetEntry> findTimeSheetEntries(Long timeSheetId) {
-        return timeSheetEntryRepository.findByTimeSheet_Id(timeSheetId);
-    }
-    
-    public TimeSheetEntry findTimeSheetEntry(Long timeSheetId, Long entryId) {
-        return timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
-    }
-    
-    public TimeSheetEntry updateTimeSheetEntry(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
-        return timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
-    }
-    
-    public boolean deleteTimeSheetEntry(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
+    public boolean deleteOne(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
         TimeSheetEntry existingTimeSheetEntry = timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
         if (existingTimeSheetEntry != null) {
             timeSheetEntryRepository.deleteByIdAndTimeSheet_Id(timeSheetId, entryId);

@@ -5,42 +5,50 @@
  */
 package com.vertis.demo.service;
 
-import com.vertis.demo.domain.Person;
 import com.vertis.demo.domain.TimeSheet;
-import com.vertis.demo.domain.TimeSheetEntry;
 import com.vertis.demo.repository.TimeSheetEntryRepository;
 import com.vertis.demo.repository.TimeSheetRepository;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author telfealr
  */
+@Service
 public class TimeSheetService {
     @Autowired
     private TimeSheetRepository timeSheetRepository;
     @Autowired
     private TimeSheetEntryRepository timeSheetEntryRepository;
+    @Autowired
+    private PersonService personService;
     
     // TimeSheet methods
-    public List<TimeSheet> findTimeSheets(Long personId) {
-        return timeSheetRepository.findAll(personId);
+    public List<TimeSheet> findAll() {
+        return timeSheetRepository.findAll();
     }
     
-    public List<TimeSheet> findTimeSheetsByOwner(Long personId) {
+    public List<TimeSheet> findAllByOwner(Long personId) {
         return timeSheetRepository.findByOwner_Id(personId);
     }
     
-    public Optional<TimeSheet> findTimeSheetById(Long id) {
-        return timeSheetRepository.findById(id);
+    public TimeSheet findOne(Long id) {
+        return timeSheetRepository.findById(id).get();
     }
     
-    public TimeSheet updateTimeSheet(Long id, TimeSheet timeSheet) {
+    public TimeSheet create(TimeSheet timeSheet) {
+        // TODO: Get currently logged in user
+        return timeSheetRepository.saveAndFlush(timeSheet);
+    }
+    
+    public TimeSheet update(Long id, TimeSheet timeSheet) {
+        // TODO: Prevent modification by user who isn't owner
         TimeSheet existingTimeSheet = timeSheetRepository.findById(id).get();
         if (existingTimeSheet != null) {
             existingTimeSheet.setClient(timeSheet.getClient());
+            // TODO: Get currently logged in user
             existingTimeSheet.setOwner(timeSheet.getOwner());
             existingTimeSheet.setTitle(timeSheet.getTitle());
             return timeSheetRepository.saveAndFlush(existingTimeSheet);
@@ -49,33 +57,11 @@ public class TimeSheetService {
         }
     }
     
-    public boolean deleteTimeSheet(Long id) {
+    public boolean deleteOne(Long id) {
+        // TODO: Get currently logged in user
         TimeSheet existingTimeSheet = timeSheetRepository.findById(id).get();
         if (existingTimeSheet != null) {
             timeSheetRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    // TimeSheetEntry methods
-    public List<TimeSheetEntry> findTimeSheetEntries(Long timeSheetId) {
-        return timeSheetEntryRepository.findByTimeSheet_Id(timeSheetId);
-    }
-    
-    public TimeSheetEntry findTimeSheetEntry(Long timeSheetId, Long entryId) {
-        return timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
-    }
-    
-    public TimeSheetEntry updateTimeSheetEntry(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
-        return timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
-    }
-    
-    public boolean deleteTimeSheetEntry(Long timeSheetId, Long entryId, TimeSheetEntry timeSheetEntry) {
-        TimeSheetEntry existingTimeSheetEntry = timeSheetEntryRepository.findByIdAndTimeSheet_Id(timeSheetId, entryId);
-        if (existingTimeSheetEntry != null) {
-            timeSheetEntryRepository.deleteByIdAndTimeSheet_Id(timeSheetId, entryId);
             return true;
         } else {
             return false;
