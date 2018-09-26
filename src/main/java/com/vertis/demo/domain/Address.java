@@ -15,15 +15,15 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Address implements Serializable {
-    @Column(name = "STREET_NUMBER")
+    @Column(name = "STREET_NUMBER", columnDefinition = "VARCHAR(15)")
     String streetNumber;
-    @Column(name = "STREET_NAME")
+    @Column(name = "STREET_NAME", columnDefinition = "VARCHAR(120)")
     String streetName;
-    @Column(name = "CITY")
+    @Column(name = "CITY", columnDefinition = "VARCHAR(40)")
     String city;
-    @Column(name = "POSTAL_CODE")
+    @Column(name = "POSTAL_CODE", columnDefinition = "VARCHAR(15)")
     String postalCode;
-    @Column(name = "COUNTRY_CODE")
+    @Column(name = "COUNTRY_CODE", columnDefinition = "VARCHAR(3)")
     String countryCode;
 
     public String getStreetNumber() {
