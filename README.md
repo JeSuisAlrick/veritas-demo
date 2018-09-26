@@ -1,23 +1,27 @@
 # Veritas Demo
 
 ## Prerequisites
-MySQL Server 5.5+
-Maven 3.5+
-Postman or any other HTTP client app
+- MySQL Server 5.5+
+- Maven 3.5+
+- Postman or any other HTTP client app
 
 ## Setting up demo
 Create mysql schema and user details:
+
+```
 Schema: vertis_demo
 Username: vertisuser
 Password: xKEMr$zL4X4m6cZ-
+```
 
 ## Launch the Service
-mvn spring-boot:run
+1) Clone or download project from here: [https://github.com/JeSuisAlrick/vertis-demo](https://github.com/JeSuisAlrick/vertis-demo)
+2) Run `mvn spring-boot:run`
 
 ## Testing
 1) Launch Postman
 2) Click Authorization tab and select "Basic Auth" as Type
-3) Set HTTP method to GET
+3) Set HTTP method to `GET`
 4) Enter the following URL as the endpoint `http://localhost:8080/api/person/3/time-sheets`
 5) Enter the following credentials:
 ```
