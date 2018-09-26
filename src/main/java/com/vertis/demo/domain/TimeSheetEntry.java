@@ -5,6 +5,8 @@
  */
 package com.vertis.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.vertis.demo.deserializer.TimeSheetDeserializer;
 import java.time.LocalDate;
@@ -34,6 +36,7 @@ public class TimeSheetEntry extends DomainObject {
     private String comment;
     
     @ManyToOne
+    @JsonIgnoreProperties({"entries"})
     private TimeSheet timeSheet;
 
     public LocalDate getPeriodDate() {

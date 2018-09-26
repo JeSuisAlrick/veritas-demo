@@ -5,6 +5,7 @@
  */
 package com.vertis.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,19 +19,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "_PERSON")
 public class Person extends DomainObject {
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME", columnDefinition = "VARCHAR(40)")
     private String firstName;
     
-    @Column(name = "MIDDLE_NAME")
+    @Column(name = "MIDDLE_NAME", columnDefinition = "VARCHAR(40)")
     private String middleName;
     
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME", columnDefinition = "VARCHAR(40)")
     private String lastName;
     
-    @Column(name = "USERNAME")
+    @Column(name = "USERNAME", columnDefinition = "VARCHAR(20)")
     private String username;
     
-    @Column(name = "ENCRYPTED_PASSWORD")
+    @JsonIgnore
+    @Column(name = "ENCRYPTED_PASSWORD", columnDefinition = "VARCHAR(2500)")
     private String encryptedPassword;
     
     @Embedded
